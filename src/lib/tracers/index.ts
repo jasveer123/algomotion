@@ -5,6 +5,11 @@ import * as H from "./hashing";
 import * as S from "./searching";
 import * as T from "./twoPointers";
 import * as W from "./windows";
+import * as LF from "./ll/fastSlow";
+import * as LH from "./ll/hashWalk";
+import * as LM from "./ll/merge";
+import * as LN from "./ll/numbers";
+import * as LR from "./ll/rewiring";
 
 export const TRACERS: Record<string, Tracer> = {
   "kadane-brute": F.kadaneBrute,
@@ -47,4 +52,48 @@ export const TRACERS: Record<string, Tracer> = {
   nextPerm: G.nextPermTracer,
   profitTwice: G.profitTwiceTracer,
   factorial: G.factorialTracer,
+
+  // linked lists
+  "ll-reverse-stack": LR.llReverseStack,
+  "ll-reverse-recursive": LR.llReverseRecursive,
+  "ll-reverse": LR.llReverseIterative,
+  "ll-reverse-k": LR.llReverseK,
+  "ll-move-last": LR.llMoveLast,
+  "ll-circular-delete": LR.llCircularDelete,
+  "ll-reverse-dll": LR.llReverseDLL,
+  "ll-rotate-dll": LR.llRotateDLL,
+  "ll-reverse-dll-groups": LR.llReverseDLLGroups,
+  "ll-reverse-flag": LR.llReverseFlag,
+  "ll-delete-greater-right": LR.llDeleteGreaterRight,
+  "ll-sort-012": LR.llSort012,
+  "ll-even-odd": LR.llEvenOdd,
+  "ll-dedup-sorted": LR.llDedupSorted,
+  "ll-loop-hash": LF.llLoopHash,
+  "ll-loop-mark": LF.llLoopMark,
+  "ll-loop-floyd": LF.llLoopFloyd,
+  "ll-loop-start": LF.llLoopStart,
+  "ll-remove-loop": LF.llRemoveLoop,
+  "ll-middle": LF.llMiddle,
+  "ll-is-circular": LF.llIsCircular,
+  "ll-split-circular": LF.llSplitCircular,
+  "ll-palindrome": LF.llPalindrome,
+  "ll-nth-from-end": LF.llNthFromEnd,
+  "ll-intersect-sorted": LM.llIntersectSorted,
+  "ll-sort-array": LM.llSortArray,
+  "ll-insertion-sort": LM.llInsertionSort,
+  "ll-merge-sort": LM.llMergeSort,
+  "ll-quick-sort": LM.llQuickSort,
+  "ll-k-sorted": LM.llKSorted,
+  "ll-flatten": LM.llFlatten,
+  "ll-merge-k": LM.llMergeK,
+  "ll-add-one": LN.llAddOne,
+  "ll-add-two": LN.llAddTwo,
+  "ll-multiply": LN.llMultiply,
+  "ll-dedup-nested": LH.llDedupNested,
+  "ll-dedup-hash": LH.llDedupHash,
+  "ll-intersection-point": LH.llIntersectionPoint,
+  "ll-pairs-dll": LH.llPairsDLL,
+  "ll-triplets-dll": LH.llTripletsDLL,
+  "ll-clone-random": LH.llCloneRandom,
+  "ll-first-unique": LH.llFirstUnique,
 };

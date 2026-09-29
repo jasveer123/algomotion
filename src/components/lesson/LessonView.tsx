@@ -13,7 +13,7 @@ import { DifficultyTag } from "@/components/algo/PatternCard";
 import { PlaybackControls } from "@/components/algo/PlaybackControls";
 import { StateLegend } from "@/components/algo/StateLegend";
 import { TabPanel, Tabs } from "@/components/algo/Tabs";
-import { PROBLEMS, patternById, problemBySlug, problemsFor } from "@/content";
+import { patternById, problemBySlug, problemsFor, problemsIn, topicById } from "@/content";
 import { isMastered, useProgress } from "@/lib/progress";
 import { TRACERS } from "@/lib/tracers";
 import type { ApproachLevel, Lang, TracerInput } from "@/lib/types";
@@ -46,10 +46,12 @@ export function LessonView({ slug }: { slug: string }) {
   const pb = usePlayback(frames);
   const n = Math.max(input.arr.length + (input.arr2?.length ?? 0) + (input.arr3?.length ?? 0), input.k && !input.arr.length ? input.k : 0, 2);
 
+  const topic = topicById(problem.topic);
   const siblings = problemsFor(problem.pattern);
-  const at = PROBLEMS.indexOf(problem);
-  const nextLesson = PROBLEMS[(at + 1) % PROBLEMS.length];
-  const prevLesson = PROBLEMS[(at - 1 + PROBLEMS.length) % PROBLEMS.length];
+  const inTopic = problemsIn(problem.topic);
+  const at = inTopic.indexOf(problem);
+  const nextLesson = inTopic[(at + 1) % inTopic.length];
+  const prevLesson = inTopic[(at - 1 + inTopic.length) % inTopic.length];
   const solved = store[problem.slug] ?? [];
   const mastered = isMastered(store, problem.slug, problem.checkpoints.length);
 
@@ -58,7 +60,7 @@ export function LessonView({ slug }: { slug: string }) {
       {/* ---------- header ---------- */}
       <header className="am-stack" style={{ gap: 16 }}>
         <nav aria-label="breadcrumb" className="am-small">
-          <Link href="/">patterns</Link> <span aria-hidden="true">/</span> <Link href={`/#${pattern.id}`}>{pattern.name}</Link> <span aria-hidden="true">/</span> <span aria-current="page">{problem.title}</span>
+          <Link href={`/#${topic.id}`}>{topic.name}</Link> <span aria-hidden="true">/</span> <Link href={`/#${pattern.id}`}>{pattern.name}</Link> <span aria-hidden="true">/</span> <span aria-current="page">{problem.title}</span>
         </nav>
         <div className="am-row" style={{ gap: 16, alignItems: "flex-start", flexWrap: "nowrap" }}>
           <IconBox tone={pattern.tone}><PatternIcon /></IconBox>
@@ -74,7 +76,7 @@ export function LessonView({ slug }: { slug: string }) {
           {problem.flagship ? <Tag tone="lavender" flat>fully worked reference</Tag> : null}
           {mastered ? <Tag tone="green" flat>mastered</Tag> : null}
         </div>
-        <p className="am-small am-muted">450 sheet · array row{problem.sheet.length > 1 ? "s" : ""} {problem.sheet.join(" & ")}: “{problem.sheetTitle}”</p>
+        <p className="am-small am-muted">450 sheet · {topic.sheetName} row{problem.sheet.length > 1 ? "s" : ""} {problem.sheet.join(" & ")}: “{problem.sheetTitle}”</p>
       </header>
 
       {/* ---------- 1. problem ---------- */}

@@ -5,8 +5,8 @@ import { Card, IconBox, Tag } from "@/components/neo";
 import { cx } from "@/components/neo/cx";
 import { IconCheck, PATTERN_ICON } from "@/components/icons";
 import { isMastered, useProgress } from "@/lib/progress";
-import { PROBLEMS, patternById, problemsFor } from "@/content";
-import type { Difficulty, Pattern, PatternId } from "@/lib/types";
+import { patternById, patternsIn, problemsFor, problemsIn, topicById } from "@/content";
+import type { Difficulty, Pattern, PatternId, TopicId } from "@/lib/types";
 
 /** Tiny looping demo of the pattern. Pure CSS; frozen under prefers-reduced-motion. */
 export function MiniAnim({ kind }: { kind: Pattern["mini"] }) {
@@ -35,6 +35,46 @@ export function MiniAnim({ kind }: { kind: Pattern["mini"] }) {
       </div>
     );
   }
+  if (kind === "relink")
+    return (
+      <div className="am-mini am-mini-ll" aria-hidden="true">
+        {[0, 1, 2, 3].map((i) => (
+          <span key={i} className="am-mini-node-wrap">
+            <i style={{ animation: `am-mini-l 3.2s ${i * 0.5}s infinite` }} />
+            {i < 3 ? <b className="am-mini-arrow" style={{ animationDelay: `${i * 0.5}s` }}>→</b> : null}
+          </span>
+        ))}
+      </div>
+    );
+  if (kind === "chase")
+    return (
+      <div className="am-mini am-mini-track" aria-hidden="true">
+        <span className="am-mini-orbit" style={{ animationDuration: "3.2s" }}><em style={{ background: "var(--state-current)" }} /></span>
+        <span className="am-mini-orbit" style={{ animationDuration: "1.6s" }}><em style={{ background: "var(--color-primary)" }} /></span>
+      </div>
+    );
+  if (kind === "zip")
+    return (
+      <div className="am-mini am-mini-zip" aria-hidden="true">
+        {[0, 1, 2, 3, 4, 5].map((i) => <i key={i} style={{ ["--dy" as string]: i % 2 ? "-10px" : "10px", animation: `am-mini-zip 3s ${i * 0.15}s ease-in-out infinite`, background: i % 2 ? "var(--color-lavender)" : "var(--color-pink)" } as CSSProperties} />)}
+      </div>
+    );
+  if (kind === "digits")
+    return (
+      <div className="am-mini am-mini-digits" aria-hidden="true">
+        {["1", "9", "9"].map((d, i) => (
+          <i key={i}><span className="am-mini-d1">{d}</span><span className="am-mini-d2" style={{ animationDelay: `${(2 - i) * 0.25}s` }}>{["2", "0", "0"][i]}</span></i>
+        ))}
+        <b className="am-mini-plus">+1</b>
+      </div>
+    );
+  if (kind === "lookup")
+    return (
+      <div className="am-mini" aria-hidden="true">
+        {cells.slice(0, 5).map((_, i) => <i key={i} style={{ animation: `am-mini-pop 2.6s ${i * 0.5}s infinite` }} />)}
+        <b className="am-mini-key">⚿</b>
+      </div>
+    );
   if (kind === "hash")
     return (
       <div className="am-mini" aria-hidden="true">
@@ -113,22 +153,34 @@ export function PatternCard({ id }: { id: PatternId }) {
   );
 }
 
-export function TopicProgressCard() {
-  const problems = PROBLEMS;
-  const total = problems.length;
+export function TopicCard({ id }: { id: TopicId }) {
+  const topic = topicById(id);
+  const problems = problemsIn(id);
+  const patterns = patternsIn(id);
   const { store } = useProgress();
   const done = problems.filter((p) => isMastered(store, p.slug, p.checkpoints.length)).length;
-  const pct = Math.round((done / total) * 100);
+  const pct = problems.length ? Math.round((done / problems.length) * 100) : 0;
+  const headId = `topic-${id}`;
   return (
-    <Card className="am-stack" style={{ gap: 14 }}>
-      <div className="am-row" style={{ justifyContent: "space-between" }}>
-        <Tag tone="yellow">arrays</Tag>
-        <div className="am-ring" style={{ background: `conic-gradient(var(--color-secondary) 0% ${pct}%, var(--track) ${pct}% 100%)` }} role="img" aria-label={`${pct}% of array lessons mastered`}>
+    <Card as="article" aria-labelledby={headId} className="am-stack" style={{ gap: 16 }}>
+      <div className="am-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+        <Tag tone={topic.tone}>{problems.length} lessons</Tag>
+        <div className="am-ring" style={{ background: `conic-gradient(var(--color-secondary) 0% ${pct}%, var(--track) ${pct}% 100%)` }} role="img" aria-label={`${pct}% of ${topic.name} lessons mastered`}>
           <span>{pct}%</span>
         </div>
       </div>
-      <h3>arrays</h3>
-      <span className="am-small am-muted">{done} of {total} lessons mastered · 5 patterns · 36 sheet rows</span>
+      <div className="am-stack" style={{ gap: 6 }}>
+        <h3 id={headId} style={{ fontSize: "1.6rem" }}>{topic.name}</h3>
+        <p style={{ fontSize: ".92rem" }}>{topic.blurb}</p>
+      </div>
+      <div className="am-row" style={{ gap: 6 }}>
+        {patterns.map((p) => <Tag key={p.id} flat>{p.name}</Tag>)}
+      </div>
+      <span className="am-small am-muted">{done} of {problems.length} mastered · {topic.sheetRows} sheet rows · {problems.filter((p) => p.flagship).length} fully worked</span>
+      <div className="am-row" style={{ gap: 10, marginTop: "auto" }}>
+        <Link href={`/lessons/${topic.start}`} className="nb-btn nb-btn-primary nb-btn-sm">start {topic.name} <span className="sr-only">with the first lesson</span></Link>
+        <Link href={`/lessons?topic=${id}`} className="nb-btn nb-btn-ghost nb-btn-sm">all {problems.length} lessons</Link>
+      </div>
     </Card>
   );
 }

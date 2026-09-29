@@ -4,6 +4,7 @@ const lg = (n: number) => Math.max(1, Math.log2(Math.max(2, n)));
 
 export const zeroSumSubarray: Problem = {
   slug: "zero-sum-subarray",
+  topic: "arrays",
   sheet: [21],
   title: "subarray with sum equal to 0",
   sheetTitle: "Find if there is any subarray with sum equal to 0",
@@ -80,6 +81,7 @@ export const zeroSumSubarray: Problem = {
 
 export const longestConsecutive: Problem = {
   slug: "longest-consecutive",
+  topic: "arrays",
   sheet: [24],
   title: "longest consecutive subsequence",
   sheetTitle: "Find longest coinsecutive subsequence",
@@ -161,6 +163,7 @@ export const longestConsecutive: Problem = {
 
 export const moreThanNByK: Problem = {
   slug: "more-than-n-by-k",
+  topic: "arrays",
   sheet: [25],
   title: "elements appearing more than n/k times",
   sheetTitle: "Given an array of size n and a number k, fin all elements that appear more than \" n/k \" times.",
@@ -231,6 +234,7 @@ def more_than(arr, k):
 
 export const subsetCheck: Problem = {
   slug: "subset-check",
+  topic: "arrays",
   sheet: [27],
   title: "check whether one array is a subset of another",
   sheetTitle: "Find whether an array is a subset of another array",

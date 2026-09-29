@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { cx } from "@/components/neo/cx";
 import type { CellState, Frame, Row } from "@/lib/types";
+import { ListCanvas, describeList } from "./ListCanvas";
 
 const MAX_CELL = 56;
 const MIN_CELL = 26;
@@ -113,9 +114,16 @@ export function AlgorithmCanvas({ frame, index, total, title }: { frame: Frame; 
     <figure className="am-canvas" style={{ margin: 0 }} aria-label={title ?? "algorithm animation"}>
       <div ref={ref} className="am-canvas-rows">
         {width > 0 && frame.rows.map((row, i) => <ArrayRow key={i} row={row} rowIndex={i} frame={frame} width={width} longest={longest} />)}
+        {width > 0 && frame.lists?.map((l, i) => (
+          <div key={`list${i}`} className="am-arr-row">
+            {l.label ? <span className="am-arr-label">{l.label}</span> : null}
+            <ListCanvas view={l} width={width} />
+          </div>
+        ))}
       </div>
       <ul className="sr-only">
         {frame.rows.map((row, i) => <li key={i}>{describeRow(row, frame, i)}</li>)}
+        {frame.lists?.map((l, i) => <li key={`l${i}`}>{describeList(l)}</li>)}
       </ul>
 
       {frame.aux?.length ? (

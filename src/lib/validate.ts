@@ -7,8 +7,17 @@ export function parseList(text: string): number[] | null {
   return nums.every((n) => Number.isInteger(n)) ? nums : null;
 }
 
+/** Letters a–z separated by commas or spaces ("a, a, b" or "aab"), stored as char codes. */
+export function parseLetters(text: string): number[] | null {
+  const compact = text.replace(/[\s,]+/g, "");
+  if (!/^[a-z]*$/.test(compact)) return null;
+  return [...compact].map((c) => c.charCodeAt(0));
+}
+
+export const formatField = (f: ArrayField, v?: number[]) => (v ?? []).map((x) => (f.letters ? String.fromCharCode(x) : String(x))).join(", ");
+
 export function checkArray(f: ArrayField, v: number[] | null): string | null {
-  if (v === null) return "use whole numbers separated by commas, e.g. 3, -1, 4.";
+  if (v === null) return f.letters ? "use lowercase letters a–z, e.g. a, a, b, c." : "use whole numbers separated by commas, e.g. 3, -1, 4.";
   const minLen = f.minLen ?? 1, maxLen = f.maxLen ?? 12;
   if (v.length < minLen) return `enter at least ${minLen} number${minLen === 1 ? "" : "s"}.`;
   if (v.length > maxLen) return `keep it to ${maxLen} numbers so every step fits on screen.`;
@@ -27,7 +36,9 @@ export function randomFor(spec: InputSpec, current: TracerInput): TracerInput {
       const len = Math.max(f.minLen ?? 1, Math.min(f.maxLen ?? 12, 5 + Math.floor(Math.random() * 4)));
       const lo = f.min ?? -20, hi = f.max ?? 20;
       const span = Math.min(hi, lo + 40) - lo;
-      let v = f.allowed
+      let v = f.letters
+        ? Array.from({ length: len }, () => 97 + Math.floor(Math.random() * 4))
+        : f.allowed
         ? Array.from({ length: len }, () => f.allowed![Math.floor(Math.random() * f.allowed!.length)])
         : Array.from({ length: len }, () => lo + Math.floor(Math.random() * (span + 1)));
       if (f.sorted) v = v.sort((a, b) => a - b);

@@ -4,6 +4,7 @@ const lg = (n: number) => Math.max(1, Math.log2(Math.max(2, n)));
 
 export const minimiseHeights: Problem = {
   slug: "minimise-heights",
+  topic: "arrays",
   sheet: [9],
   title: "minimise the maximum difference between heights",
   sheetTitle: "Minimise the maximum difference between heights [V.IMP]",
@@ -92,6 +93,7 @@ export const minimiseHeights: Problem = {
 
 export const minJumps: Problem = {
   slug: "min-jumps",
+  topic: "arrays",
   sheet: [10],
   title: "minimum number of jumps to reach the end",
   sheetTitle: "Minimum no. of Jumps to reach end of an array",
@@ -187,6 +189,7 @@ export const minJumps: Problem = {
 
 export const mergeIntervals: Problem = {
   slug: "merge-intervals",
+  topic: "arrays",
   sheet: [14],
   title: "merge overlapping intervals",
   sheetTitle: "Merge Intervals",
@@ -277,6 +280,7 @@ export const mergeIntervals: Problem = {
 
 export const nextPermutation: Problem = {
   slug: "next-permutation",
+  topic: "arrays",
   sheet: [15],
   title: "next permutation",
   sheetTitle: "Next Permutation",
@@ -358,6 +362,7 @@ export const nextPermutation: Problem = {
 
 export const profitTwice: Problem = {
   slug: "stock-at-most-twice",
+  topic: "arrays",
   sheet: [26],
   title: "maximum profit buying and selling a share at most twice",
   sheetTitle: "Maximum profit by buying and selling a share atmost twice",
@@ -441,6 +446,7 @@ export const profitTwice: Problem = {
 
 export const factorialLarge: Problem = {
   slug: "factorial-large",
+  topic: "arrays",
   sheet: [22],
   title: "factorial of a large number",
   sheetTitle: "Find factorial of a large number",

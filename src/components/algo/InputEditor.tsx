@@ -2,20 +2,19 @@
 import { useState } from "react";
 import { Button, Input } from "@/components/neo";
 import { IconShuffle } from "@/components/icons";
-import { checkArray, parseList, randomFor } from "@/lib/validate";
+import { checkArray, formatField, parseLetters, parseList, randomFor } from "@/lib/validate";
 import type { InputSpec, TracerInput } from "@/lib/types";
 
-const toText = (a?: number[]) => (a ?? []).join(", ");
 
 /** Lets learners replay the animation on their own numbers. Invalid input never reaches the tracer. */
 export function InputEditor({ spec, value, onApply }: { spec: InputSpec; value: TracerInput; onApply: (v: TracerInput) => void }) {
-  const [text, setText] = useState<Record<string, string>>(() => Object.fromEntries(spec.arrays.map((f) => [f.key, toText(value[f.key])])));
+  const [text, setText] = useState<Record<string, string>>(() => Object.fromEntries(spec.arrays.map((f) => [f.key, formatField(f, value[f.key])])));
   const [nums, setNums] = useState<Record<string, string>>(() => Object.fromEntries((spec.scalars ?? []).map((s) => [s.key, String(value[s.key] ?? "")])));
   const [errors, setErrors] = useState<Record<string, string | null>>({});
   const [formError, setFormError] = useState<string | null>(null);
 
   const load = (v: TracerInput) => {
-    setText(Object.fromEntries(spec.arrays.map((f) => [f.key, toText(v[f.key])])));
+    setText(Object.fromEntries(spec.arrays.map((f) => [f.key, formatField(f, v[f.key])])));
     setNums(Object.fromEntries((spec.scalars ?? []).map((s) => [s.key, String(v[s.key] ?? "")])));
     setErrors({});
     setFormError(null);
@@ -26,7 +25,7 @@ export function InputEditor({ spec, value, onApply }: { spec: InputSpec; value: 
     const next: TracerInput = { arr: [] };
     const errs: Record<string, string | null> = {};
     for (const f of spec.arrays) {
-      const v = parseList(text[f.key] ?? "");
+      const v = f.letters ? parseLetters(text[f.key] ?? "") : parseList(text[f.key] ?? "");
       errs[f.key] = checkArray(f, v);
       if (v) next[f.key] = v;
     }
@@ -60,7 +59,7 @@ export function InputEditor({ spec, value, onApply }: { spec: InputSpec; value: 
             label={f.label}
             value={text[f.key] ?? ""}
             onChange={(e) => setText((t) => ({ ...t, [f.key]: e.target.value }))}
-            hint={`comma-separated · ${f.minLen ?? 1}–${f.maxLen ?? 12} values${f.min !== undefined && f.max !== undefined ? ` · ${f.min} to ${f.max}` : ""}`}
+            hint={f.letters ? `letters a–z · ${f.minLen ?? 1}–${f.maxLen ?? 12} characters` : `comma-separated · ${f.minLen ?? 1}–${f.maxLen ?? 12} values${f.min !== undefined && f.max !== undefined ? ` · ${f.min} to ${f.max}` : ""}`}
             error={errors[f.key]}
             inputMode="text"
             autoComplete="off"

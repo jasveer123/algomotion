@@ -4,6 +4,7 @@ const lg = (n: number) => Math.max(1, Math.log2(Math.max(2, n)));
 
 export const reverseArray: Problem = {
   slug: "reverse-array",
+  topic: "arrays",
   sheet: [1],
   title: "reverse the array",
   sheetTitle: "Reverse the array",
@@ -78,6 +79,7 @@ export const reverseArray: Problem = {
 
 export const sort012: Problem = {
   slug: "sort-012",
+  topic: "arrays",
   sheet: [4],
   title: "sort an array of 0s, 1s and 2s",
   sheetTitle: "Given an array which consists of only 0, 1 and 2. Sort the array without using any sorting algo",
@@ -184,6 +186,7 @@ export const sort012: Problem = {
 
 export const threeWayPartition: Problem = {
   slug: "three-way-partition",
+  topic: "arrays",
   sheet: [32],
   title: "three-way partitioning around a range",
   sheetTitle: "Three way partitioning of an array around a given value",
@@ -282,6 +285,7 @@ export const threeWayPartition: Problem = {
 
 export const alternatingPosNeg: Problem = {
   slug: "alternate-positive-negative",
+  topic: "arrays",
   sheet: [20],
   title: "rearrange in alternating positive & negative (O(1) space)",
   sheetTitle: "Rearrange the array in alternating positive and negative items with O(1) extra space",
@@ -387,6 +391,7 @@ export const alternatingPosNeg: Problem = {
 
 export const mergeWithoutExtraSpace: Problem = {
   slug: "merge-without-extra-space",
+  topic: "arrays",
   sheet: [12],
   title: "merge two sorted arrays without extra space",
   sheetTitle: "Merge 2 sorted arrays without using Extra space.",
@@ -506,6 +511,7 @@ export const mergeWithoutExtraSpace: Problem = {
 
 export const rotateByOne: Problem = {
   slug: "rotate-by-one",
+  topic: "arrays",
   sheet: [7],
   title: "cyclically rotate an array by one",
   sheetTitle: "Write a program to cyclically rotate an array by one.",
@@ -573,6 +579,7 @@ export const rotateByOne: Problem = {
 
 export const palindromeOps: Problem = {
   slug: "min-ops-palindrome",
+  topic: "arrays",
   sheet: [34],
   title: "minimum merge operations to make an array palindrome",
   sheetTitle: "Minimum no. of operations required to make an array palindrome",
@@ -641,6 +648,7 @@ export const palindromeOps: Problem = {
 
 export const trappingRainWater: Problem = {
   slug: "trapping-rain-water",
+  topic: "arrays",
   sheet: [29],
   title: "trapping rain water",
   sheetTitle: "Trapping Rain water problem",
@@ -774,6 +782,7 @@ def trap(h):
 
 export const findDuplicate: Problem = {
   slug: "find-duplicate",
+  topic: "arrays",
   sheet: [11],
   title: "find the duplicate in an array of n + 1 integers",
   sheetTitle: "find duplicate in an array of N+1 Integers",
@@ -873,6 +882,7 @@ export const findDuplicate: Problem = {
 
 export const unionIntersection: Problem = {
   slug: "union-intersection",
+  topic: "arrays",
   sheet: [6],
   title: "union and intersection of two sorted arrays",
   sheetTitle: "Find the Union and Intersection of the two sorted arrays.",
@@ -969,6 +979,7 @@ static void add(List<Integer> l, int x) {
 
 export const commonThree: Problem = {
   slug: "common-in-three",
+  topic: "arrays",
   sheet: [19],
   title: "common elements in three sorted arrays",
   sheetTitle: "find common elements In 3 sorted arrays",
@@ -1064,6 +1075,7 @@ export const commonThree: Problem = {
 
 export const tripletSum: Problem = {
   slug: "triplet-sum",
+  topic: "arrays",
   sheet: [28],
   title: "find a triplet that sums to a given value",
   sheetTitle: "Find the triplet that sum to a given value",

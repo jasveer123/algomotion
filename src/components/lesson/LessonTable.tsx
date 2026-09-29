@@ -1,31 +1,53 @@
 "use client";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Card } from "@/components/neo";
 import { cx } from "@/components/neo/cx";
 import { IconCheck } from "@/components/icons";
 import { DifficultyTag } from "@/components/algo/PatternCard";
 import { Tabs } from "@/components/algo/Tabs";
-import { PATTERNS, PROBLEMS, patternById } from "@/content";
+import { PATTERNS, PROBLEMS, TOPICS, patternById, topicById } from "@/content";
 import { isMastered, useProgress } from "@/lib/progress";
-import type { PatternId } from "@/lib/types";
+import type { PatternId, TopicId } from "@/lib/types";
 
-type Filter = "all" | PatternId;
+type TopicFilter = "all" | TopicId;
+type PatternFilter = "all" | PatternId;
 
 export function LessonTable() {
   const { store } = useProgress();
-  const [filter, setFilter] = useState<Filter>("all");
-  const rows = PROBLEMS.filter((p) => filter === "all" || p.pattern === filter);
+  const params = useSearchParams();
+  const router = useRouter();
+  const fromUrl = params.get("topic");
+  const [topic, setTopicState] = useState<TopicFilter>(TOPICS.some((t) => t.id === fromUrl) ? (fromUrl as TopicId) : "all");
+  const [pattern, setPattern] = useState<PatternFilter>("all");
+  const setTopic = (t: TopicFilter) => {
+    setTopicState(t);
+    setPattern("all");
+    router.replace(t === "all" ? "/lessons" : `/lessons?topic=${t}`, { scroll: false });
+  };
+  const inTopic = PROBLEMS.filter((p) => topic === "all" || p.topic === topic);
+  const rows = inTopic.filter((p) => pattern === "all" || p.pattern === pattern);
+  const patterns = PATTERNS.filter((p) => topic !== "all" && p.topic === topic);
   return (
     <div className="am-stack" style={{ gap: 16 }}>
-      <Tabs<Filter>
-        label="filter by pattern"
-        idBase="filter"
-        tabs={[{ id: "all", label: `all (${PROBLEMS.length})` }, ...PATTERNS.map((p) => ({ id: p.id as Filter, label: `${p.name} (${PROBLEMS.filter((q) => q.pattern === p.id).length})` }))]}
-        value={filter}
-        onChange={setFilter}
+      <Tabs<TopicFilter>
+        label="filter by topic"
+        idBase="topic"
+        tabs={[{ id: "all", label: `all topics (${PROBLEMS.length})` }, ...TOPICS.map((t) => ({ id: t.id as TopicFilter, label: `${t.name} (${PROBLEMS.filter((p) => p.topic === t.id).length})` }))]}
+        value={topic}
+        onChange={setTopic}
       />
-      <Card flat style={{ padding: 0, overflow: "hidden" }} role="tabpanel" id={`filter-panel-${filter}`} aria-labelledby={`filter-tab-${filter}`}>
+      {patterns.length ? (
+        <Tabs<PatternFilter>
+          label="filter by pattern"
+          idBase="filter"
+          tabs={[{ id: "all", label: "every pattern" }, ...patterns.map((p) => ({ id: p.id as PatternFilter, label: `${p.name} (${inTopic.filter((q) => q.pattern === p.id).length})` }))]}
+          value={pattern}
+          onChange={setPattern}
+        />
+      ) : null}
+      <Card flat style={{ padding: 0, overflow: "hidden" }} role="region" aria-live="polite" aria-label={`${rows.length} lessons`}>
         <ol className="am-problem-list" style={{ padding: 12 }}>
           {rows.map((p) => {
             const m = isMastered(store, p.slug, p.checkpoints.length);
@@ -38,7 +60,7 @@ export function LessonTable() {
                     <span>{p.title}{m ? <span className="sr-only"> (mastered)</span> : null}</span>
                   </span>
                   <span className="am-row" style={{ gap: 8 }}>
-                    <span className="am-small am-muted">{patternById(p.pattern).name}</span>
+                    <span className="am-small am-muted">{topic === "all" ? `${topicById(p.topic).name} · ` : ""}{patternById(p.pattern).name}</span>
                     <DifficultyTag d={p.difficulty} />
                   </span>
                 </Link>

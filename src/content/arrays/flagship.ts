@@ -4,6 +4,7 @@ const log2 = (n: number) => Math.max(1, Math.log2(Math.max(2, n)));
 
 export const kadane: Problem = {
   slug: "kadane",
+  topic: "arrays",
   sheet: [8, 13],
   title: "largest sum contiguous subarray (kadane's algorithm)",
   sheetTitle: "find Largest sum contiguous Subarray [V. IMP] · Kadane's Algo [V.V.V.V.V IMP]",
@@ -197,6 +198,7 @@ export const kadane: Problem = {
 
 export const moveNegatives: Problem = {
   slug: "move-negatives",
+  topic: "arrays",
   sheet: [5],
   title: "move all negative elements to one side",
   sheetTitle: "Move all the negative elements to one side of the array",
@@ -370,6 +372,7 @@ export const moveNegatives: Problem = {
 
 export const pairSum: Problem = {
   slug: "pair-sum",
+  topic: "arrays",
   sheet: [18],
   title: "count pairs with a given sum",
   sheetTitle: "find all pairs on integer array whose sum is equal to given number",

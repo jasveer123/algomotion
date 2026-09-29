@@ -49,8 +49,39 @@ export interface Stats {
   writes: number;
 }
 
+/** One node of a drawn linked structure. Nodes sit on a grid (row, col) so Y-shapes and 2-D lists work. */
+export interface ListNode {
+  id: number;
+  value: Cell;
+  row: number;
+  col: number;
+  next: number | null;
+  prev?: number | null;
+  random?: number | null;
+  /** A second outgoing link drawn downwards (flatten: `bottom`). */
+  down?: number | null;
+  state?: CellState;
+  /** Highlight for this node's `next` arrow (e.g. the link that was just rewired). */
+  edge?: CellState;
+  /** Small caption under the value, e.g. "×2" or "copy". */
+  tag?: string;
+}
+
+export interface ListView {
+  label?: string;
+  nodes: ListNode[];
+  /** Pointer labels under nodes; `node: null` points at the null marker. */
+  pointers?: { label: string; node: number | null }[];
+  rowLabels?: string[];
+  doubly?: boolean;
+  /** Draw a trailing null marker after the last node of row 0 when its next is null (default true). */
+  showNull?: boolean;
+}
+
 export interface Frame {
   rows: Row[];
+  /** Linked structures drawn under the array rows. */
+  lists?: ListView[];
   pointers?: Pointer[];
   regions?: Region[];
   /** Semantic code-line key — matched against `@key` markers in each language's code. */
@@ -73,7 +104,11 @@ export interface TracerInput {
 
 export type Tracer = (input: TracerInput) => Frame[];
 
-export type PatternId = "two-pointers" | "sliding-window" | "sorting-searching" | "hashing" | "greedy";
+export type TopicId = "arrays" | "linked-list";
+
+export type PatternId =
+  | "two-pointers" | "sliding-window" | "sorting-searching" | "hashing" | "greedy"
+  | "ll-rewiring" | "ll-fast-slow" | "ll-merge" | "ll-numbers" | "ll-hash-walk";
 export type Difficulty = "easy" | "medium" | "hard";
 
 export interface ArrayField {
@@ -89,6 +124,8 @@ export interface ArrayField {
   check?: (values: number[]) => string | null;
   /** Custom random generator for the "random input" button. */
   gen?: () => number[];
+  /** Values are single lowercase letters (stored as char codes). */
+  letters?: boolean;
 }
 
 export interface ScalarField {
@@ -141,7 +178,8 @@ export interface Checkpoint {
 
 export interface Problem {
   slug: string;
-  /** Position in the Love Babbar 450 sheet (Array rows). Kadane covers two sheet rows. */
+  topic: TopicId;
+  /** Row numbers inside this topic's section of the Love Babbar 450 sheet. */
   sheet: number[];
   title: string;
   sheetTitle: string;
@@ -161,9 +199,36 @@ export interface Problem {
 
 export interface Pattern {
   id: PatternId;
+  topic: TopicId;
   name: string;
   tone: "teal" | "pink" | "lavender" | "yellow" | "coral";
   what: string;
   clues: string[];
-  mini: "pointers" | "window" | "bars" | "hash" | "jumps";
+  mini: "pointers" | "window" | "bars" | "hash" | "jumps" | "relink" | "chase" | "zip" | "digits" | "lookup";
+}
+
+export interface Topic {
+  id: TopicId;
+  name: string;
+  /** Sheet section name, e.g. "Array". */
+  sheetName: string;
+  tone: "teal" | "pink" | "lavender" | "yellow" | "coral";
+  blurb: string;
+  /** How many rows the topic has in the sheet. */
+  sheetRows: number;
+  /** Lesson to start with. */
+  start: string;
+}
+
+/** Lightweight problem info for lists and cards. */
+export interface ProblemSummary {
+  slug: string;
+  topic: TopicId;
+  title: string;
+  summary: string;
+  pattern: PatternId;
+  difficulty: Difficulty;
+  sheet: number[];
+  checkpoints: number;
+  flagship: boolean;
 }

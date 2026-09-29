@@ -18,5 +18,6 @@ export async function generateMetadata({ params }: PageProps<"/lessons/[slug]">)
 export default async function LessonPage({ params }: PageProps<"/lessons/[slug]">) {
   const { slug } = await params;
   if (!problemBySlug(slug)) notFound();
-  return <LessonView slug={slug} />;
+  // keyed by slug so input, approach and panel state reset between lessons
+  return <LessonView key={slug} slug={slug} />;
 }

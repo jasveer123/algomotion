@@ -9,8 +9,8 @@ const caveat = Caveat({ subsets: ["latin"], weight: ["700"], variable: "--font-c
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-jetbrains" });
 
 export const metadata: Metadata = {
-  title: { default: "algomotion — arrays", template: "%s · algomotion" },
-  description: "Watch array algorithms think: 35 problems from the Love Babbar 450 sheet, taught through step-by-step animations, pattern recognition and brute-force-to-optimal solutions.",
+  title: { default: "algomotion — watch data structures think", template: "%s · algomotion" },
+  description: "Arrays and linked lists from the Love Babbar 450 sheet, taught through step-by-step animations, pattern recognition and brute-force-to-optimal solutions.",
 };
 
 export const viewport: Viewport = {
@@ -37,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             {children}
           </main>
           <footer className="am-footer">
-            <p>algomotion · arrays module · problems from the love babbar dsa sheet (array rows 1–36), built on the neobrutalism design system. <Link href="/lab">try the array lab</Link>.</p>
+            <p>algomotion · arrays & linked lists · problems from the love babbar dsa sheet, built on the neobrutalism design system. <Link href="/lab">try the data-structure lab</Link>.</p>
           </footer>
         </div>
       </body>

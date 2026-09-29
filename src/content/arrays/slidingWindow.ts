@@ -2,6 +2,7 @@ import type { Problem } from "@/lib/types";
 
 export const smallestSubarray: Problem = {
   slug: "smallest-subarray-sum",
+  topic: "arrays",
   sheet: [31],
   title: "smallest subarray with sum greater than x",
   sheetTitle: "Smallest Subarray with sum greater than a given value",
@@ -85,6 +86,7 @@ export const smallestSubarray: Problem = {
 
 export const maxProductSubarray: Problem = {
   slug: "max-product-subarray",
+  topic: "arrays",
   sheet: [23],
   title: "maximum product subarray",
   sheetTitle: "find maximum product subarray",
@@ -155,7 +157,7 @@ export const maxProductSubarray: Problem = {
       tracer: "maxProduct",
     },
   ],
-  input: { arrays: [{ key: "arr", label: "numbers", min: -9, max: 9, minLen: 1, maxLen: 10 }], defaults: { arr: [6, -3, -10, 0, 2] } },
+  input: { arrays: [{ key: "arr", label: "numbers", min: -10, max: 10, minLen: 1, maxLen: 10 }], defaults: { arr: [6, -3, -10, 0, 2] } },
   checkpoints: [
     { q: "why track the minimum product at all?", options: ["for the final answer", "a negative number can turn the minimum into the new maximum", "to detect zeros"], answer: 1, right: "exactly — −30 × −2 = 60.", wrong: "what happens when you multiply a very negative product by a negative number?" },
     { q: "what does a 0 in the array do to hi and lo?", options: ["nothing", "both become 0, so the next run starts fresh", "the answer becomes 0"], answer: 1, right: "right — max(x, hi·0) with x = 0 resets the run.", wrong: "hi = max(0, hi × 0). what's that?" },
@@ -164,6 +166,7 @@ export const maxProductSubarray: Problem = {
 
 export const minSwapsK: Problem = {
   slug: "min-swaps-k-together",
+  topic: "arrays",
   sheet: [33],
   title: "minimum swaps to bring elements ≤ k together",
   sheetTitle: "Minimum swaps required bring elements less equal K together",
@@ -252,6 +255,7 @@ export const minSwapsK: Problem = {
 
 export const stockOnce: Problem = {
   slug: "best-time-stock",
+  topic: "arrays",
   sheet: [17],
   title: "best time to buy and sell stock (once)",
   sheetTitle: "Best time to buy and Sell stock",

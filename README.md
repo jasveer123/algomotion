@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# algomotion
 
-## Getting Started
+A visual way to learn data structures & algorithms: step-by-step animations, pattern recognition and solutions that grow from brute force to optimal — built around the Love Babbar 450 sheet.
 
-First, run the development server:
+**Topics so far:** arrays (35 lessons, 36 sheet rows) and linked lists (36 lessons, 36 sheet rows), each grouped into five patterns, plus a visualizer and a data-structure lab.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev              # http://localhost:3000
+npm run check:content    # validate every lesson: sheet coverage, code markers, default inputs
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## where things live
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| path | what |
+| --- | --- |
+| `src/content/<topic>/` | lesson content per topic (`arrays/`, `linked-list/`), one file per pattern, plus the topic's pattern list in `index.ts` |
+| `src/content/index.ts` | the topic list and helpers used by pages |
+| `src/lib/tracers/` | step-by-step animations — array tracers at the top level, linked-list tracers in `ll/` |
+| `src/lib/list.ts` | the linked-list model tracers use (stable node ids so nodes glide when relinked) |
+| `src/components/algo/` | lesson building blocks: `AlgorithmCanvas` (arrays), `ListCanvas` (nodes & arrows), playback, code viewer, checkpoints, pattern cards |
+| `src/components/lesson/`, `lab/`, `visualizer/` | the lesson template, the array + linked-list lab, the visualizer |
+| `src/app/globals.css` | design tokens (Neobrutalism + AlgoMotion state colours) and all styles |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## adding a topic
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Add the topic to `TOPICS` in `src/content/index.ts` and its `TopicId` in `src/lib/types.ts`.
+2. Create `src/content/<topic>/` with patterns (`topic` set on each) and lessons in sheet order.
+3. Write tracers for new animations and register them in `src/lib/tracers/index.ts`.
+4. Run `npm run check:content` — it fails until every sheet row is covered and every animation matches its code.

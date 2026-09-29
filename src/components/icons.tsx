@@ -30,4 +30,13 @@ export const IconSun = (p: SVGProps<SVGSVGElement>) => <svg {...base(p)}><circle
 export const IconMoon = (p: SVGProps<SVGSVGElement>) => <svg {...base(p)}><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>;
 export const IconLayers = (p: SVGProps<SVGSVGElement>) => <svg {...base(p)}><polygon points="12 2 2 7 12 12 22 7 12 2" /><polyline points="2 17 12 22 22 17" /><polyline points="2 12 12 17 22 12" /></svg>;
 
-export const PATTERN_ICON = { "two-pointers": IconArrows, "sliding-window": IconWindow, "sorting-searching": IconBars, hashing: IconHash, greedy: IconZap } as const;
+export const IconRelink = (p: SVGProps<SVGSVGElement>) => <svg {...base(p)}><rect x="2" y="9" width="6" height="6" rx="1.5" /><rect x="16" y="9" width="6" height="6" rx="1.5" /><path d="M8 12h3" /><path d="M16 12c-2-5-6-5-8 0" /><polyline points="9.5 9 8 12 11 12.5" /></svg>;
+export const IconChase = (p: SVGProps<SVGSVGElement>) => <svg {...base(p)}><circle cx="12" cy="12" r="8" /><circle cx="12" cy="4" r="2" fill="currentColor" /><circle cx="19" cy="15" r="2" fill="currentColor" /></svg>;
+export const IconZip = (p: SVGProps<SVGSVGElement>) => <svg {...base(p)}><path d="M4 6h5l4 6h7" /><path d="M4 18h5l4-6" /><polyline points="17 9 20 12 17 15" /></svg>;
+export const IconDigits = (p: SVGProps<SVGSVGElement>) => <svg {...base(p)}><rect x="2" y="7" width="6" height="10" rx="1.5" /><rect x="9" y="7" width="6" height="10" rx="1.5" /><rect x="16" y="7" width="6" height="10" rx="1.5" /><path d="M5 10v4M12 10h1.5v4M18.5 10h2l-2 4" /></svg>;
+export const IconKey = (p: SVGProps<SVGSVGElement>) => <svg {...base(p)}><circle cx="7.5" cy="15.5" r="4.5" /><path d="M10.7 12.3 21 2" /><path d="m16 7 3 3" /><path d="m18.5 4.5 2 2" /></svg>;
+
+export const PATTERN_ICON = {
+  "two-pointers": IconArrows, "sliding-window": IconWindow, "sorting-searching": IconBars, hashing: IconHash, greedy: IconZap,
+  "ll-rewiring": IconRelink, "ll-fast-slow": IconChase, "ll-merge": IconZip, "ll-numbers": IconDigits, "ll-hash-walk": IconKey,
+} as const;

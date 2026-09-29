@@ -1,33 +1,59 @@
-import { PROBLEMS, PATTERNS } from "../src/content";
-import { TRACERS } from "../src/lib/tracers";
+/**
+ * Validates all lesson content. Run: npm run check:content
+ * - unique slugs; every sheet row of every topic is covered
+ * - optimal approaches have all four languages; tracers exist
+ * - every animation step's line key appears as an @marker in that approach's code
+ * - each lesson's default input passes its own input rules
+ */
+import { PATTERNS, PROBLEMS, TOPICS } from "../src/content";
 import { parseCode } from "../src/lib/code";
-let problems = 0, errors = 0;
-const sheetRows = new Set<number>();
+import { TRACERS } from "../src/lib/tracers";
+import { checkArray } from "../src/lib/validate";
+
+const errors: string[] = [];
+const slugs = new Set<string>();
 for (const p of PROBLEMS) {
-  problems++;
-  p.sheet.forEach((s) => sheetRows.add(s));
+  const where = `${p.topic}/${p.slug}`;
+  if (slugs.has(p.slug)) errors.push(`${where}: duplicate slug`);
+  slugs.add(p.slug);
+  if (!PATTERNS.some((x) => x.id === p.pattern && x.topic === p.topic)) errors.push(`${where}: pattern ${p.pattern} doesn't belong to topic ${p.topic}`);
   const opt = p.approaches.find((a) => a.level === "optimal");
-  if (!opt) { console.log("NO OPTIMAL", p.slug); errors++; }
-  if (opt && Object.keys(opt.code).length !== 4) { console.log("optimal missing langs", p.slug, Object.keys(opt.code)); errors++; }
-  if (p.flagship) for (const a of p.approaches) if (Object.keys(a.code).length !== 4) { console.log("flagship approach missing langs", p.slug, a.level); errors++; }
-  if (p.checkpoints.length < 2) { console.log("few checkpoints", p.slug); errors++; }
-  for (const c of p.checkpoints) if (c.answer >= c.options.length) { console.log("bad answer idx", p.slug, c.q); errors++; }
+  if (!opt) errors.push(`${where}: no optimal approach`);
+  else if (Object.keys(opt.code).length !== 4) errors.push(`${where}: optimal needs js, py, java and cpp`);
+  if (p.flagship) for (const a of p.approaches) {
+    if (Object.keys(a.code).length !== 4) errors.push(`${where}: flagship approach ${a.level} needs 4 languages`);
+    if (!a.tracer) errors.push(`${where}: flagship approach ${a.level} needs an animation`);
+  }
+  if (p.checkpoints.length < 2) errors.push(`${where}: needs at least 2 checkpoints`);
+  for (const c of p.checkpoints) if (c.answer < 0 || c.answer >= c.options.length) errors.push(`${where}: checkpoint answer out of range: ${c.q}`);
+  for (const f of p.input.arrays) {
+    const err = checkArray(f, p.input.defaults[f.key] ?? null);
+    if (err) errors.push(`${where}: default "${f.key}" fails its own rules — ${err}`);
+  }
+  const cross = p.input.check?.(p.input.defaults);
+  if (cross) errors.push(`${where}: default input fails the cross-field check — ${cross}`);
   for (const a of p.approaches) {
     if (!a.tracer) continue;
     const t = TRACERS[a.tracer];
-    if (!t) { console.log("missing tracer", a.tracer); errors++; continue; }
+    if (!t) { errors.push(`${where}: unknown tracer ${a.tracer}`); continue; }
     const frames = t(p.input.defaults);
     const used = new Set(frames.map((f) => f.line).filter(Boolean) as string[]);
     for (const [lang, src] of Object.entries(a.code)) {
       const keys = new Set(parseCode(src!).keys.flat());
       const missing = [...used].filter((k) => !keys.has(k));
-      if (missing.length) { console.log(`${p.slug} ${a.level} ${lang}: tracer keys not in code:`, missing.join(",")); errors++; }
+      if (missing.length) errors.push(`${where} ${a.level}.${lang}: animation uses @${missing.join(", @")} but the code has no such marker`);
     }
-    const last = frames[frames.length - 1];
-    console.log(p.slug.padEnd(30), a.level.padEnd(9), String(frames.length).padStart(4), last.result ?? "(no result)");
+    if (!frames[frames.length - 1].result) errors.push(`${where} ${a.level}: last animation frame has no result`);
   }
 }
-const missingRows = Array.from({ length: 36 }, (_, i) => i + 1).filter((r) => !sheetRows.has(r));
-console.log(`\n${problems} problems, patterns: ${PATTERNS.map((p) => p.id + "=" + PROBLEMS.filter((q) => q.pattern === p.id).length).join(" ")}`);
-console.log("sheet rows not covered:", missingRows.length ? missingRows : "none");
-console.log("errors:", errors);
+for (const t of TOPICS) {
+  const lessons = PROBLEMS.filter((p) => p.topic === t.id);
+  const rows = new Set(lessons.flatMap((p) => p.sheet));
+  const missing = Array.from({ length: t.sheetRows }, (_, i) => i + 1).filter((r) => !rows.has(r));
+  const counts = PATTERNS.filter((x) => x.topic === t.id).map((x) => `${x.id}=${lessons.filter((p) => p.pattern === x.id).length}`).join(" ");
+  console.log(`${t.id}: ${lessons.length} lessons · ${counts}${missing.length ? ` · MISSING sheet rows ${missing.join(", ")}` : " · all sheet rows covered"}`);
+  if (missing.length) errors.push(`${t.id}: sheet rows not covered: ${missing.join(", ")}`);
+  if (!lessons.some((p) => p.slug === t.start)) errors.push(`${t.id}: start lesson ${t.start} not found`);
+}
+if (errors.length) { console.error(`\n${errors.length} problem(s):\n- ${errors.join("\n- ")}`); process.exit(1); }
+console.log("content OK");

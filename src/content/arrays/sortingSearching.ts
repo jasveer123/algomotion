@@ -4,6 +4,7 @@ const lg = (n: number) => Math.max(1, Math.log2(Math.max(2, n)));
 
 export const maxMin: Problem = {
   slug: "max-and-min",
+  topic: "arrays",
   sheet: [2],
   title: "find the maximum and minimum element",
   sheetTitle: "Find the maximum and minimum element in an array",
@@ -98,6 +99,7 @@ export const maxMin: Problem = {
 
 export const kthElement: Problem = {
   slug: "kth-max-min",
+  topic: "arrays",
   sheet: [3],
   title: "find the kth max and min element",
   sheetTitle: "Find the \"Kth\" max and min element of an array",
@@ -216,6 +218,7 @@ int kthSmallest(vector<int>& arr, int k) {
 
 export const countInversions: Problem = {
   slug: "count-inversions",
+  topic: "arrays",
   sheet: [16],
   title: "count inversions",
   sheetTitle: "Count Inversion",
@@ -406,6 +409,7 @@ const medianApproaches = (sameSize: boolean): Approach[] => [
 
 export const medianEqual: Problem = {
   slug: "median-equal-size",
+  topic: "arrays",
   sheet: [35],
   title: "median of two sorted arrays of equal size",
   sheetTitle: "Median of 2 sorted arrays of equal size",
@@ -433,6 +437,7 @@ export const medianEqual: Problem = {
 
 export const medianDifferent: Problem = {
   slug: "median-different-size",
+  topic: "arrays",
   sheet: [36],
   title: "median of two sorted arrays of different size",
   sheetTitle: "Median of 2 sorted arrays of different size",
@@ -459,6 +464,7 @@ export const medianDifferent: Problem = {
 
 export const chocolateDistribution: Problem = {
   slug: "chocolate-distribution",
+  topic: "arrays",
   sheet: [30],
   title: "chocolate distribution problem",
   sheetTitle: "Chocolate Distribution problem",
